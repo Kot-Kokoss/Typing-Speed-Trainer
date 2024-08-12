@@ -1,0 +1,21 @@
+.textDisplay {
+
+  margin: 30px;
+  font-size: 2rem;
+  max-width: 100%;
+  opacity: 1;
+  color: #646669;
+  height: 156px;
+  overflow: hidden;
+
+  .words {
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    font-size: 1em;
+    line-height: 1em;
+    margin: .25em .3em;
+    font-variant: no-common-ligatures;
+    border-bottom: 2px solid transparent;
+  }
+}

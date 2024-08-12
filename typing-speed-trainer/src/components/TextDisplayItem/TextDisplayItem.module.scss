@@ -1,0 +1,13 @@
+.word {
+  position: relative;
+    font-size: 1em;
+    line-height: 1em;
+    margin: .25em .3em;
+    font-variant: no-common-ligatures;
+    border-bottom: 2px solid transparent;
+
+    .letter {
+      display: inline-block;
+    }
+}
+
