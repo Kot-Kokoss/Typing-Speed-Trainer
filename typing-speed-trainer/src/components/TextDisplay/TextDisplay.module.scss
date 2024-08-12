@@ -1,11 +1,11 @@
 .textDisplay {
-
+  cursor: pointer;
   margin: 30px;
   font-size: 2rem;
   max-width: 100%;
   opacity: 1;
   color: #646669;
-  height: 156px;
+  height: 204px;
   overflow: hidden;
 
   .words {
@@ -18,4 +18,29 @@
     font-variant: no-common-ligatures;
     border-bottom: 2px solid transparent;
   }
+
+  .input {
+    position: absolute;
+    font-size: 1rem;
+    opacity: 0;
+    padding: 0;
+    margin: 0 auto;
+    border: none;
+    outline: none;
+    display: block;
+    resize: none;
+    position: absolute;
+    
+    cursor: default;
+    pointer-events: none;
+    border-radius: 0;
+  }
+}
+
+.correct {
+  color: #c6c6c6;
+}
+
+.error {
+  color: #e44545
 }
