@@ -20,8 +20,7 @@ const TextDisplayItem: FunctionComponent<TextDisplayItemProps> = observer(
           <div
             className={`${styles.letter}
                       ${letterStates[id] === 'correct' ? styles.correct : ''} 
-                      ${letterStates[id] === 'error' ? styles.error : ''} 
-                      `}
+                      ${letterStates[id] === 'error' ? styles.error : ''}`}
             key={id}>
             {letter}
           </div>

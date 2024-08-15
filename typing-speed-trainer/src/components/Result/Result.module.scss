@@ -1,0 +1,23 @@
+.result {
+  color: #d1c0c5;
+  width: 150px;
+  display: flex;
+  margin: 0 auto;
+  align-items: center;
+  flex-direction: column;
+
+  h2 {
+    font-size: 30px;
+    color: #d1c0c5;
+    margin-bottom: 10px;
+  }
+
+  .indicators {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 24px;
+    color: #d1c0c5;
+  }
+
+}

@@ -4,8 +4,6 @@
   font-size: 2rem;
   max-width: 100%;
   opacity: 1;
-  height: 204px;
-  overflow: hidden;
 
   .words {
     display: flex;
@@ -36,10 +34,6 @@
   }
 }
 
-.correct {
-  color: #c6c6c6;
-}
-
-.error {
-  color: #e44545
+.hidden {
+  display: none;
 }

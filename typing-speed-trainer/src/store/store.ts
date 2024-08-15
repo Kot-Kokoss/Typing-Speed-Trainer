@@ -4,7 +4,7 @@ import texts from '../texts/texts.json'
 class Store {
   texts: string[] = texts;
   activeText: string[] = [];
-  activeWord: string[] = [];
+  errorCount: number = 0;
 
   constructor() {
     makeAutoObservable(this);
@@ -14,8 +14,8 @@ class Store {
     this.activeText = text.split(' ')
   }
 
-  addActiveWord = (word: string) => {
-    this.activeWord = word.split(' ')
+  addErrorCount = (count: number) => {
+    this.errorCount = this.errorCount + count;
   }
   
 }
