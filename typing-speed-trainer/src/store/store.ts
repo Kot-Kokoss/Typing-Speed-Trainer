@@ -3,12 +3,20 @@ import texts from '../texts/texts.json'
 
 class Store {
   texts: string[] = texts;
-  activeText: string = '';
-  
+  activeText: string[] = [];
+  activeWord: string[] = [];
+
   constructor() {
     makeAutoObservable(this);
   }
 
+  addActiveText = (text: string) => {
+    this.activeText = text.split(' ')
+  }
+
+  addActiveWord = (word: string) => {
+    this.activeWord = word.split(' ')
+  }
   
 }
 

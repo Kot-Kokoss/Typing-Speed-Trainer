@@ -6,8 +6,20 @@
     font-variant: no-common-ligatures;
     border-bottom: 2px solid transparent;
 
-    .letter {
+    div {
       display: inline-block;
+    }
+    
+    .letter {
+      color: #646669;
+    }
+
+    .correct {
+      color: #c6c6c6;
+    }
+    
+    .error {
+      color: #e44545
     }
 }
 

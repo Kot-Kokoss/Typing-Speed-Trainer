@@ -12,6 +12,7 @@
   "dependencies": {
     "mobx": "^6.13.1",
     "mobx-react-lite": "^4.0.7",
+    "random": "^4.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "sass": "^1.77.8"
