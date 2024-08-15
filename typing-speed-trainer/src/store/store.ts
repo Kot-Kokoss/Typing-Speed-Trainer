@@ -13,7 +13,7 @@ class Store {
   }
 
   generateRandomText = () => {
-    const textNum: number = random.int(0, 2);
+    const textNum: number = random.int(0, texts.length - 1);
     this.activeText = texts[textNum]
   }
 

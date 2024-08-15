@@ -17,47 +17,94 @@ const TextDisplay: FunctionComponent = observer(() => {
   const currentWordRef = useRef<HTMLDivElement | null>(null);
 
   let text: string = store.activeText;
-  let textArray: string[] = text.split(/\s+/);
+  const textArray: string[] = text.split(/\s+/);
 
   // Состояние для хранения результатов введенных слов
   const [wordStates, setWordStates] = useState<Array<{ letterStates: string[] }>>(
     Array(textArray.length).fill({ letterStates: [] }),
   );
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     inputRef.current?.focus();
+
+    const currentWord = textArray[currentWordIndex];
 
     if (e.key === ' ') {
       e.preventDefault(); // Предотвращаем добавление пробела в инпут
 
-      // Сохраняем состояние введенных букв для текущего слова
-      const currentWord = textArray[currentWordIndex];
-      const letterStates = currentWord.split('').map((letter, index) => {
-        if (index < inputValue.length) {
-          if (letter !== inputValue[index]) {
-            store.setErrorCount(store.errorCount + 1); // Увеличиваем счетчик ошибок при каждой неверно введенной букве
-          }
+      // Проверяем, если текущее слово последнее
+      if (currentWordIndex === textArray.length - 1 && inputValue === currentWord) {
+        setShowResult(true); // Отображаем результаты, если последнее слово введено правильно
+        return;
+      }
+
+      if (inputValue === currentWord) {
+        // Если текущее слово введено верно, переходим к следующему слову
+        const letterStates = currentWord.split('').map((letter, index) => {
           return letter === inputValue[index] ? 'correct' : 'error';
+        });
+
+        // Обновляем состояние слов
+        setWordStates((prevStates) => {
+          const newStates = [...prevStates];
+          newStates[currentWordIndex] = { letterStates }; // Обновляем состояние текущего слова
+          return newStates;
+        });
+
+        // Переходим к следующему слову и сбрасываем инпут
+        setCurrentWordIndex((prevIndex) => Math.min(prevIndex + 1, textArray.length - 1));
+        setInputValue('');
+      }
+    } else if (e.key === 'Backspace') {
+      e.preventDefault(); // Предотвращаем стандартное поведение
+
+      // Удаляем последний символ из inputValue
+      const updatedValue = inputValue.slice(0, -1); // Значение inputValue с удаленным последним символом
+      setInputValue(updatedValue);
+
+      // Обновляем состояние для текущего слова для backspace
+      const letterStates = currentWord.split('').map((letter, index) => {
+        if (index < updatedValue.length) {
+          return letter === updatedValue[index] ? 'correct' : 'error';
+        } else if (index === updatedValue.length) {
+          return 'default'; // Последняя буква (которая стала не введенной) будет "по умолчанию"
         }
-        return 'default';
+        return 'default'; // Остальные еще не введенные также будут по умолчанию
       });
 
-      // Обновляем состояние слов
       setWordStates((prevStates) => {
         const newStates = [...prevStates];
-        newStates[currentWordIndex] = { letterStates }; // Обновляем состояние текущего слова
+        newStates[currentWordIndex] = { letterStates };
         return newStates;
       });
-
-      // Переходим к следующему слову и сбрасываем инпут
-      setCurrentWordIndex((prevIndex) => Math.min(prevIndex + 1, textArray.length - 1));
-      setInputValue('');
     } else {
       e.preventDefault(); // Предотвращаем стандартное действие при нажатии клавиши
-      const value = inputValue + e.key; // Получаем новое значение вместе с добавленным символом
-      setInputValue(value);
+
+      // Обновляем значение inputValue
+      const updatedValue = inputValue + e.key;
+      setInputValue(updatedValue);
+
+      // Обновляем состояние для текущего слова при нажатии клавиши
+      const letterStates = currentWord.split('').map((letter, index) => {
+        if (index < updatedValue.length) {
+          // Проверяем буквы на правильность
+          const isCorrect = letter === updatedValue[index];
+          if (!isCorrect) {
+            store.setErrorCount(store.errorCount + 1); // Увеличиваем счетчик ошибок, если буква неверная
+          }
+          return isCorrect ? 'correct' : 'error';
+        }
+        return 'default'; // Если символ не введен, показываем как default
+      });
+
+      setWordStates((prevStates) => {
+        const newStates = [...prevStates];
+        newStates[currentWordIndex] = { letterStates };
+        return newStates;
+      });
     }
   };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputValue(value);
@@ -77,6 +124,7 @@ const TextDisplay: FunctionComponent = observer(() => {
     setStartTime(Date.now());
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const stopTimer = () => {
     const endTime = Date.now();
     setElapsedTime(endTime - startTime);
@@ -87,7 +135,6 @@ const TextDisplay: FunctionComponent = observer(() => {
     store.setErrorCount(0);
     store.generateRandomText();
     text = store.activeText;
-    textArray = text.split(/\s+/);
     setInputValue('');
     setCurrentWordIndex(0);
     setWordStates(Array(textArray.length).fill({ letterStates: [] }));
@@ -99,7 +146,7 @@ const TextDisplay: FunctionComponent = observer(() => {
     if (showResult) {
       stopTimer();
     }
-  }, [showResult]);
+  }, [showResult, stopTimer]);
 
   // Обновляем ссылку при изменении текущего слова
   useEffect(() => {
@@ -111,13 +158,6 @@ const TextDisplay: FunctionComponent = observer(() => {
       });
     }
   }, [currentWordIndex]);
-
-  useEffect(() => {
-    // Проверяем, что пользователь достиг последнего слова
-    if (currentWordIndex === textArray.length - 1) {
-      setShowResult(true);
-    }
-  }, [currentWordIndex, textArray.length]);
 
   return (
     <>
