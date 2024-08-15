@@ -107,7 +107,7 @@ const TextDisplay: FunctionComponent = observer(() => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setInputValue(value);
+    setInputValue(value.toLowerCase);
   };
 
   const currentWord = textArray[currentWordIndex];
