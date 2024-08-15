@@ -1,13 +1,12 @@
 import { useRef, useEffect } from 'react';
-
 import styles from './WordsInput.module.scss';
 
 const WordsInput = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleKeyDown = (e) => {
-    // Проверяем, была ли нажата комбинация Ctrl + Shift + I
-    if (e.entrKey) {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      // Правильная проверка нажатия клавиши Enter
       inputRef.current?.focus(); // Устанавливаем фокус на инпут
       alert(1);
     }

@@ -8,12 +8,13 @@ import Result from '../Result';
 import store from '../../store/store';
 
 const TextDisplay: FunctionComponent = observer(() => {
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [inputValue, setInputValue] = useState('');
-  const [showResult, setShowResult] = useState(false);
-  const [startTime, setStartTime] = useState(0);
-  const [elapsedTime, setElapsedTime] = useState(0);
+  const [currentWordIndex, setCurrentWordIndex] = useState<number>(0);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [showResult, setShowResult] = useState<boolean>(false);
+  const [startTime, setStartTime] = useState<number>(0);
+  const [elapsedTime, setElapsedTime] = useState<number>(0);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const currentWordRef = useRef<HTMLDivElement | null>(null);
 
   let text: string = store.activeText;
   let textArray: string[] = text.split(/\s+/);
@@ -23,7 +24,7 @@ const TextDisplay: FunctionComponent = observer(() => {
     Array(textArray.length).fill({ letterStates: [] }),
   );
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     inputRef.current?.focus();
 
     if (e.key === ' ') {
@@ -53,11 +54,11 @@ const TextDisplay: FunctionComponent = observer(() => {
       setInputValue('');
     } else {
       e.preventDefault(); // Предотвращаем стандартное действие при нажатии клавиши
-      const value = e.target.value + e.key; // Получаем новое значение вместе с добавленным символом
+      const value = inputValue + e.key; // Получаем новое значение вместе с добавленным символом
       setInputValue(value);
     }
   };
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputValue(value);
   };
@@ -71,8 +72,6 @@ const TextDisplay: FunctionComponent = observer(() => {
     }
     return 'default';
   });
-
-  const currentWordRef = useRef<HTMLDivElement | null>(null);
 
   const startTimer = () => {
     setStartTime(Date.now());
