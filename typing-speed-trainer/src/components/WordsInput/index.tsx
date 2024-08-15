@@ -1,14 +1,14 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 
 import styles from './WordsInput.module.scss';
 
 const WordsInput = () => {
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = (e) => {
     // Проверяем, была ли нажата комбинация Ctrl + Shift + I
-    if (event.entrKey) {
-      inputRef.current.focus(); // Устанавливаем фокус на инпут
+    if (e.entrKey) {
+      inputRef.current?.focus(); // Устанавливаем фокус на инпут
       alert(1);
     }
   };

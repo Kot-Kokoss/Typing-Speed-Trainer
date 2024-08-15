@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import { FunctionComponent } from 'react';
 import { observer } from 'mobx-react-lite';
 import styles from './App.module.scss';
 

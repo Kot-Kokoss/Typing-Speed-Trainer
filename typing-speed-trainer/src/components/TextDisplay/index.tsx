@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useRef, useState, useEffect } from 'react';
+import { FunctionComponent, useRef, useState, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import styles from './TextDisplay.module.scss';
@@ -16,7 +16,7 @@ const TextDisplay: FunctionComponent = observer(() => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   let text: string = store.activeText;
-  const textArray: string[] = text.split(/\s+/);
+  let textArray: string[] = text.split(/\s+/);
 
   // Состояние для хранения результатов введенных слов
   const [wordStates, setWordStates] = useState<Array<{ letterStates: string[] }>>(
@@ -50,11 +50,11 @@ const TextDisplay: FunctionComponent = observer(() => {
 
       // Переходим к следующему слову и сбрасываем инпут
       setCurrentWordIndex((prevIndex) => Math.min(prevIndex + 1, textArray.length - 1));
-      setInputValue(''); // Сбрасываем значение инпута
+      setInputValue('');
     } else {
       e.preventDefault(); // Предотвращаем стандартное действие при нажатии клавиши
       const value = e.target.value + e.key; // Получаем новое значение вместе с добавленным символом
-      setInputValue(value); // Устанавливаем новое значение в состоянии
+      setInputValue(value);
     }
   };
   const handleInputChange = (e) => {
@@ -88,6 +88,7 @@ const TextDisplay: FunctionComponent = observer(() => {
     store.setErrorCount(0);
     store.generateRandomText();
     text = store.activeText;
+    textArray = text.split(/\s+/);
     setInputValue('');
     setCurrentWordIndex(0);
     setWordStates(Array(textArray.length).fill({ letterStates: [] }));
