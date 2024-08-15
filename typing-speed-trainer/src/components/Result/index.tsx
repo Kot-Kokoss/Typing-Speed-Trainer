@@ -5,9 +5,10 @@ import store from '../../store/store';
 
 type ResultProps = {
   wpm: number;
+  retry: () => void;
 };
 
-const Result: FunctionComponent<ResultProps> = observer(({ wpm }) => {
+const Result: FunctionComponent<ResultProps> = observer(({ wpm, retry }) => {
   return (
     <div className={styles.result}>
       <h2>Result</h2>
@@ -19,6 +20,9 @@ const Result: FunctionComponent<ResultProps> = observer(({ wpm }) => {
         <div className="">WPM:</div>
         <div className="">{wpm}</div>
       </div>
+      <a onClick={() => retry()} href="">
+        Retry
+      </a>
     </div>
   );
 });

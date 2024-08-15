@@ -3,8 +3,6 @@ import { observer } from 'mobx-react-lite';
 
 import styles from './TextDisplayItem.module.scss';
 
-import store from '../../store/store';
-
 type TextDisplayItemProps = {
   word: string;
   letterStates: string[];

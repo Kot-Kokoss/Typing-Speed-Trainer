@@ -7,19 +7,16 @@ import Result from '../Result';
 
 import store from '../../store/store';
 
-type TextDisplayProps = {
-  text: string;
-};
-
-const TextDisplay: FunctionComponent<TextDisplayProps> = observer(({ text }) => {
+const TextDisplay: FunctionComponent = observer(() => {
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [inputValue, setInputValue] = useState('');
   const [showResult, setShowResult] = useState(false);
   const [startTime, setStartTime] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
+  let text: string = store.activeText;
   const textArray: string[] = text.split(/\s+/);
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
 
   // Состояние для хранения результатов введенных слов
   const [wordStates, setWordStates] = useState<Array<{ letterStates: string[] }>>(
@@ -37,7 +34,7 @@ const TextDisplay: FunctionComponent<TextDisplayProps> = observer(({ text }) => 
       const letterStates = currentWord.split('').map((letter, index) => {
         if (index < inputValue.length) {
           if (letter !== inputValue[index]) {
-            store.addErrorCount(1); // Увеличиваем счетчик ошибок при каждой неверно введенной букве
+            store.setErrorCount(store.errorCount + 1); // Увеличиваем счетчик ошибок при каждой неверно введенной букве
           }
           return letter === inputValue[index] ? 'correct' : 'error';
         }
@@ -78,17 +75,29 @@ const TextDisplay: FunctionComponent<TextDisplayProps> = observer(({ text }) => 
   const currentWordRef = useRef<HTMLDivElement | null>(null);
 
   const startTimer = () => {
-    setStartTime(Date.now()); // Стартовое время при начале ввода текста
+    setStartTime(Date.now());
   };
 
   const stopTimer = () => {
     const endTime = Date.now();
-    setElapsedTime(endTime - startTime); // Вычисляем прошедшее время
+    setElapsedTime(endTime - startTime);
+  };
+
+  const retry = () => {
+    setShowResult(false);
+    store.setErrorCount(0);
+    store.generateRandomText();
+    text = store.activeText;
+    setInputValue('');
+    setCurrentWordIndex(0);
+    setWordStates(Array(textArray.length).fill({ letterStates: [] }));
+    setStartTime(0);
+    setElapsedTime(0);
   };
 
   useEffect(() => {
     if (showResult) {
-      stopTimer(); // Останавливаем таймер при завершении текста
+      stopTimer();
     }
   }, [showResult]);
 
@@ -112,7 +121,9 @@ const TextDisplay: FunctionComponent<TextDisplayProps> = observer(({ text }) => 
 
   return (
     <>
-      {showResult && <Result wpm={Math.floor(textArray.length / (elapsedTime / 60000))} />}
+      {showResult && (
+        <Result wpm={Math.floor(textArray.length / (elapsedTime / 60000))} retry={retry} />
+      )}
       <div
         className={`${showResult === true ? styles.hidden : styles.textDisplay}`}
         onClick={() => {
@@ -128,13 +139,13 @@ const TextDisplay: FunctionComponent<TextDisplayProps> = observer(({ text }) => 
           type="text"
           value={inputValue}
           onChange={handleInputChange}
-          onKeyDown={handleKeyDown} // Обработчик для нажатия клавиш
+          onKeyDown={handleKeyDown}
         />
         <div className={styles.words}>
           {textArray.map((word, id) => {
             const isCurrentWord = id === currentWordIndex;
             return (
-              <div ref={isCurrentWord ? currentWordRef : null}>
+              <div key={`word_${id}`} ref={isCurrentWord ? currentWordRef : null}>
                 <TextDisplayItem
                   word={word}
                   key={id}
