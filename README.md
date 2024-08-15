@@ -7,7 +7,9 @@
 * MobX
 * SCSS
 * Vite
-
+  
+## Посмотреть
+https://typing-speed-trainer-mu.vercel.app
 ## Установка 
 
 Инструкции по установке и настройке проекта локально.
